@@ -10,14 +10,22 @@ import { Edge, Node, ClusterNode, Layout } from '@swimlane/ngx-graph';
 export class GraphComponent implements OnInit {
 
   chapter: number = 1;
+  layout: String | Layout = 'dagreCluster';
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  onChapterSelect(event: any) {
-    this.chapter = event.target.value;
+  public getNodeStyles(node: Node): any {
+    return {
+      'visibility': +node.data.chapter <= this.chapter ? 'visible' : 'hidden'
+    };
   }
 
+  public getEdgeStyles(edge: Edge): any {
+    return {
+      'visibility': +edge.data.chapter <= this.chapter ? 'visible' : 'hidden'
+    };
+  }
 }

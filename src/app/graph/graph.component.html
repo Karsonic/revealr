@@ -1,6 +1,6 @@
 <div class="sliderContainer">
-  <input #chapterSlider type="range" class="slider" min="1" max="100" value="1">
-  <label for="chapterSlider">Chapter #{{chapterSlider.value}}</label>
+  <input [(ngModel)]="chapter" type="range" class="slider" min="1" max="20">
+  <label for="chapterSlider">Chapter #{{chapter}}</label>
 </div>
 <ngx-graph
   class="chart-container"
@@ -10,25 +10,58 @@
       id: 'a',
       source: 'first',
       target: 'second',
-      label: 'is parent of'
+      label: 'is parent of',
+      data: {
+        chapter: 3
+      }
     }, {
       id: 'b',
       source: 'first',
       target: 'third',
-      label: 'custom label'
+      label: 'custom label',
+      data: {
+        chapter: 7
+      }
     }
   ]"
   [nodes]="[
     {
       id: 'first',
-      label: 'A'
+      label: 'A',
+      data: {
+        chapter: 1
+      }
     }, {
       id: 'second',
-      label: 'B'
+      label: 'B',
+      data: {
+        chapter: 2
+      }
     }, {
       id: 'third',
-      label: 'C'
+      label: 'C',
+      data: {
+        chapter: 5
+      }
     }
   ]"
 >
+<ng-template #nodeTemplate let-node>
+    <svg:g class="node" [ngStyle]=getNodeStyles(node)>
+      <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height" [attr.fill]="node.data.color" />
+      <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">{{node.label}} Revealed in Ch.{{node.data.chapter}}</svg:text>
+    </svg:g>
+</ng-template>
+
+<ng-template #linkTemplate let-link>
+  <svg:g class="edge" [ngStyle]=getEdgeStyles(link)>
+    <svg:path class="line" stroke-width="2">
+    </svg:path>
+    <svg:text class="edge-label" text-anchor="middle">
+      <textPath class="text-path" startOffset="50%">
+        {{link.label}}
+      </textPath>
+    </svg:text>
+  </svg:g>
+</ng-template>
 </ngx-graph>
